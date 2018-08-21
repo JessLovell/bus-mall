@@ -5,8 +5,8 @@ var leftEl = document.getElementById('left');
 var centerEl = document.getElementById('center');
 var rightEl = document.getElementById('right');
 
-var allImages = [];
-var totalClicks = 0;
+var allImages = []; //array to hold all object instances
+var totalClicks = 0; //counter for total image clicks
 
 
 function CatalogImages(name) {
@@ -17,7 +17,9 @@ function CatalogImages(name) {
   allImages.push(this);
 }
 
+//Images to be passed into the constructor function
 var allImageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
+
 
 allImageNames.forEach(function (imageName){
   new CatalogImages(imageName);
@@ -73,6 +75,7 @@ showRandomImage();
 imageEl.addEventListener('click', showAndTrackImages);
 
 function showAndTrackImages (event){
+
   showRandomImage(event);
 
   var voteCount = allImageNames.indexOf(event.target.title);
@@ -81,11 +84,13 @@ function showAndTrackImages (event){
     totalClicks++;
   }
 
-  var votedClicks = 26;
-  if (totalClicks === votedClicks){
+  var VOTED_CLICKS = 5;
+  if (totalClicks === VOTED_CLICKS){
     imageEl.removeEventListener('click', showAndTrackImages);
     console.log('event listener removed.');
-    renderAllVotes();
+    // renderAllVotes(); //turn this off because it is a list
+    createChartArrays();
+    drawChart();
   }
 }
 
@@ -103,4 +108,52 @@ function renderAllVotes(){
   for(var i = 0; i < allImages.length; i++){
     allImages[i].render();
   }
+}
+
+//Prep for Chart Stuff
+var chartDataVotes = [];
+var chartDataNames = [];
+var chartDataViews = [];
+var productChart; //for chart
+
+function createChartArrays (){
+  for (var i = 0; i < allImages.length; i++){
+    chartDataVotes[i] = allImages[i].votes;
+    chartDataNames[i] = allImages[i].name;
+    chartDataViews[i] = allImages[i].views;
+  }
+}
+
+//Chart Stuff
+var data = {
+  labels: chartDataNames,
+  datasets: [{
+    data: chartDataVotes,
+    backgroundColor: 'navy',
+    hoverBackgroundColor: 'grey'
+  }]
+};
+
+function drawChart() {
+  var cxt = document.getElementById('product-graph').getContext('2d');
+  productChart = new Chart(cxt, {
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: false,
+      animation: {
+        duration: 1000,
+        easing: 'easeOutBounce'
+      }
+    },
+    scales: {
+      yAxes: [{
+        ticks:{
+          max: 10,
+          min: 0,
+          stepSize: 1.0
+        }
+      }]
+    }
+  });
 }
