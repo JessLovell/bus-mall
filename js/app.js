@@ -84,7 +84,7 @@ function showAndTrackImages (event){
     totalClicks++;
   }
 
-  var VOTED_CLICKS = 5;
+  var VOTED_CLICKS = 25;
   if (totalClicks === VOTED_CLICKS){
     imageEl.removeEventListener('click', showAndTrackImages);
     console.log('event listener removed.');
