@@ -23,38 +23,36 @@ allImageNames.forEach(function (imageName){
   new CatalogImages(imageName);
 });
 
-function createRandomNumber () {
-  if (allImageNames.length === 0) {
-    allImageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
-  } else {
-    var rando = Math.floor(allImageNames.length * Math.random());
-    
+// function createRandomNumber () {
+//   if (allImageNames.length === 0) {
+//     allImageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
+//   } else {
+//     var rando = Math.floor(allImageNames.length * Math.random());
 
-    for (var i = 0; i < allImages.length; i++) {
-      if (allImages[i].name === allImageNames[rando] ){
-        var indexValue = i;
-        break;
-      }
-    }
-    allImageNames.splice(rando, 1);
-  }
-  return indexValue;
-}
+
+//     for (var i = 0; i < allImages.length; i++) {
+//       if (allImages[i].name === allImageNames[rando] ){
+//         var indexValue = i;
+//         break;
+//       }
+//     }
+//     allImageNames.splice(rando, 1);
+//   }
+//   return indexValue;
+// }
 
 function showRandomImage() {
 
-  //   var rando = Math.floor(allImages.length * Math.random());
-  var randomLeft = createRandomNumber();
-  var randomCenter = createRandomNumber();
-  var randomRight = createRandomNumber();
+  var randomLeft =  Math.floor(allImageNames.length * Math.random());
+  var randomCenter =  Math.floor(allImageNames.length * Math.random());
+  var randomRight =  Math.floor(allImageNames.length * Math.random());
 
-
-  //to display 3 unique random numbers
-  //   while (randomLeft === randomCenter || randomCenter === randomRight || randomRight === randomLeft) {
-  //     randomLeft = Math.floor(allImages.length * Math.random());
-  //     randomCenter = Math.floor(allImages.length * Math.random());
-  //     randomRight = Math.floor(allImages.length * Math.random());
-  //   }
+  // to display 3 unique random numbers
+  while (randomLeft === randomCenter || randomCenter === randomRight || randomRight === randomLeft) {
+    randomLeft = Math.floor(allImages.length * Math.random());
+    randomCenter = Math.floor(allImages.length * Math.random());
+    randomRight = Math.floor(allImages.length * Math.random());
+  }
 
   allImages[randomLeft].views++;
   leftEl.src = allImages[randomLeft].path;
@@ -87,5 +85,22 @@ function showAndTrackImages (event){
   if (totalClicks === votedClicks){
     imageEl.removeEventListener('click', showAndTrackImages);
     console.log('event listener removed.');
+    renderAllVotes();
+  }
+}
+
+CatalogImages.prototype.render = function (){
+  var ulEl = document.createElement('ul');
+
+  var liEl = document.createElement('li');
+  liEl.textContent = `${this.name} was viewed ${this.views} times and clicked on ${this.votes}`;
+  ulEl.appendChild(liEl);
+
+  document.getElementById('print-results').appendChild(ulEl);
+};
+
+function renderAllVotes(){
+  for(var i = 0; i < allImages.length; i++){
+    allImages[i].render();
   }
 }
