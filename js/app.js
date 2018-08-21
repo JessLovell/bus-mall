@@ -23,21 +23,38 @@ allImageNames.forEach(function (imageName){
   new CatalogImages(imageName);
 });
 
-function showRandomImage(event) {
-  var randomLeft = Math.floor(allImages.length * Math.random());
-  var randomCenter = Math.floor(allImages.length * Math.random());
-  var randomRight = Math.floor(allImages.length * Math.random());
-  var uniqueRandomIndex = [randomRight, randomCenter, randomLeft];
-  console.log[`outside: ${uniqueRandomIndex}`];
+function createRandomNumber () {
+  if (allImageNames.length === 0) {
+    allImageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
+  } else {
+    var rando = Math.floor(allImageNames.length * Math.random());
+    
+
+    for (var i = 0; i < allImages.length; i++) {
+      if (allImages[i].name === allImageNames[rando] ){
+        var indexValue = i;
+        break;
+      }
+    }
+    allImageNames.splice(rando, 1);
+  }
+  return indexValue;
+}
+
+function showRandomImage() {
+
+  //   var rando = Math.floor(allImages.length * Math.random());
+  var randomLeft = createRandomNumber();
+  var randomCenter = createRandomNumber();
+  var randomRight = createRandomNumber();
+
 
   //to display 3 unique random numbers
-  while (randomLeft === randomCenter || randomCenter === randomRight || randomRight === randomLeft) {
-    randomLeft = Math.floor(allImages.length * Math.random());
-    randomCenter = Math.floor(allImages.length * Math.random());
-    randomRight = Math.floor(allImages.length * Math.random());
-    uniqueRandomIndex = [randomRight, randomCenter, randomLeft];
-    console.log(`Inside unique loop ${uniqueRandomIndex}`);
-  }
+  //   while (randomLeft === randomCenter || randomCenter === randomRight || randomRight === randomLeft) {
+  //     randomLeft = Math.floor(allImages.length * Math.random());
+  //     randomCenter = Math.floor(allImages.length * Math.random());
+  //     randomRight = Math.floor(allImages.length * Math.random());
+  //   }
 
   allImages[randomLeft].views++;
   leftEl.src = allImages[randomLeft].path;
@@ -55,9 +72,9 @@ function showRandomImage(event) {
 
 showRandomImage();
 
+imageEl.addEventListener('click', showAndTrackImages);
 
-imageEl.addEventListener('click', function(event){
-
+function showAndTrackImages (event){
   showRandomImage(event);
 
   var voteCount = allImageNames.indexOf(event.target.title);
@@ -66,4 +83,9 @@ imageEl.addEventListener('click', function(event){
     totalClicks++;
   }
 
-});
+  var votedClicks = 26;
+  if (totalClicks === votedClicks){
+    imageEl.removeEventListener('click', showAndTrackImages);
+    console.log('event listener removed.');
+  }
+}
