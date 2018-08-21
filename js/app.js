@@ -93,7 +93,7 @@ CatalogImages.prototype.render = function (){
   var ulEl = document.createElement('ul');
 
   var liEl = document.createElement('li');
-  liEl.textContent = `${this.name} was viewed ${this.views} times and clicked on ${this.votes}`;
+  liEl.textContent = `${this.name} was viewed ${this.views} times and clicked on ${this.votes} times.`;
   ulEl.appendChild(liEl);
 
   document.getElementById('print-results').appendChild(ulEl);
