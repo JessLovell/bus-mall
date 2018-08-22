@@ -25,48 +25,56 @@ allImageNames.forEach(function (imageName){
   new CatalogImages(imageName);
 });
 
-// function createRandomNumber () {
-//   if (allImageNames.length === 0) {
-//     allImageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
-//   } else {
-//     var rando = Math.floor(allImageNames.length * Math.random());
+CatalogImages.prototype.render = function (){
+  var ulEl = document.createElement('ul');
 
+  var liEl = document.createElement('li');
+  liEl.textContent = `${this.name} was viewed ${this.views} times and clicked on ${this.votes} times.`;
+  ulEl.appendChild(liEl);
 
-//     for (var i = 0; i < allImages.length; i++) {
-//       if (allImages[i].name === allImageNames[rando] ){
-//         var indexValue = i;
-//         break;
-//       }
-//     }
-//     allImageNames.splice(rando, 1);
-//   }
-//   return indexValue;
-// }
+  document.getElementById('print-results').appendChild(ulEl);
+};
+
+function createRandomNumber () {
+
+  if (allImageNames.length === 0) {
+    allImageNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
+  }
+
+  var rando = Math.floor(allImageNames.length * Math.random());
+  var indexValue = 0;
+
+  for (var i = 0; i < allImages.length; i++) {
+    if (allImages[i].name === allImageNames[rando]){
+      indexValue = i;
+    }
+  }
+  allImageNames.splice(rando, 1);
+
+  return indexValue;
+}
 
 function showRandomImage() {
 
-  var randomLeft =  Math.floor(allImageNames.length * Math.random());
-  var randomCenter =  Math.floor(allImageNames.length * Math.random());
-  var randomRight =  Math.floor(allImageNames.length * Math.random());
-
-  // to display 3 unique random numbers
-  while (randomLeft === randomCenter || randomCenter === randomRight || randomRight === randomLeft) {
-    randomLeft = Math.floor(allImages.length * Math.random());
-    randomCenter = Math.floor(allImages.length * Math.random());
-    randomRight = Math.floor(allImages.length * Math.random());
-  }
+  var randomLeft = createRandomNumber();
+  var randomCenter = createRandomNumber();
+  var randomRight = createRandomNumber();
 
   allImages[randomLeft].views++;
   leftEl.src = allImages[randomLeft].path;
   leftEl.title = allImages[randomLeft].name;
+  leftEl.alt = allImages[randomLeft].name;
 
   allImages[randomCenter].views++;
   centerEl.src = allImages[randomCenter].path;
   centerEl.title = allImages[randomCenter].name;
+  centerEl.alt = allImages[randomCenter].name;
+
 
   allImages[randomRight].views++;
   rightEl.src = allImages[randomRight].path;
   rightEl.title = allImages[randomRight].name;
+  rightEl.alt = allImages[randomRight].name;
 
 }
 
@@ -79,42 +87,30 @@ function showAndTrackImages (event){
   showRandomImage(event);
 
   var voteCount = allImageNames.indexOf(event.target.title);
+
   if (voteCount > -1){
     allImages[voteCount].votes++;
     totalClicks++;
   }
 
-  var VOTED_CLICKS = 25;
+  var VOTED_CLICKS = 2;
   if (totalClicks === VOTED_CLICKS){
     imageEl.removeEventListener('click', showAndTrackImages);
     console.log('event listener removed.');
-    // renderAllVotes(); //turn this off because it is a list
     createChartArrays();
     drawChart();
   }
 }
 
-CatalogImages.prototype.render = function (){
-  var ulEl = document.createElement('ul');
 
-  var liEl = document.createElement('li');
-  liEl.textContent = `${this.name} was viewed ${this.views} times and clicked on ${this.votes} times.`;
-  ulEl.appendChild(liEl);
 
-  document.getElementById('print-results').appendChild(ulEl);
-};
 
-function renderAllVotes(){
-  for(var i = 0; i < allImages.length; i++){
-    allImages[i].render();
-  }
-}
 
 //Prep for Chart Stuff
 var chartDataVotes = [];
 var chartDataNames = [];
 var chartDataViews = [];
-var productChart; //for chart
+var productChart; // eslint-disable-line
 
 function createChartArrays (){
   for (var i = 0; i < allImages.length; i++){
@@ -136,7 +132,7 @@ var data = {
 
 function drawChart() {
   var cxt = document.getElementById('product-graph').getContext('2d');
-  productChart = new Chart(cxt, {
+  productChart = new Chart(cxt, { // eslint-disable-line
     type: 'bar',
     data: data,
     options: {
@@ -151,7 +147,7 @@ function drawChart() {
         ticks:{
           max: 10,
           min: 0,
-          stepSize: 1.0
+          stepSize: 1
         }
       }]
     }
