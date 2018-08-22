@@ -30,7 +30,6 @@ allImageFileNames.forEach(function (imageName){
 });
 
 function createRandomNumber () {
-
   if (allImageFileNames.length === 0) {
     allImageFileNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
   }
@@ -44,7 +43,6 @@ function createRandomNumber () {
     }
   }
   allImageFileNames.splice(rando, 1);
-
   return indexValue;
 }
 
@@ -56,7 +54,6 @@ function renderImage(image,element) {
 }
 
 function showRandomImage() {
-
   var randomLeft = createRandomNumber();
   var randomCenter = createRandomNumber();
   var randomRight = createRandomNumber();
@@ -69,10 +66,8 @@ function showRandomImage() {
 imageEl.addEventListener('click', showAndTrackImages);
 
 function showAndTrackImages (event){
-
   showRandomImage(event);
   tallyClicks(event);
-
 }
 
 function tallyClicks(event) {
@@ -88,7 +83,7 @@ function tallyClicks(event) {
 
   var VOTED_CLICKS = 26;
 
-  if (totalClicks === VOTED_CLICKS){
+  if (totalClicks >= VOTED_CLICKS){
     imageEl.removeEventListener('click', showAndTrackImages);
     console.log('event listener removed.');
 
