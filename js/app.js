@@ -86,14 +86,16 @@ function showAndTrackImages (event){
 
   showRandomImage(event);
 
-  var voteCount = allImageNames.indexOf(event.target.title);
-
-  if (voteCount > -1){
-    allImages[voteCount].votes++;
-    totalClicks++;
+  for( var i = 0; i < allImages.length; i++){
+    if (allImages[i].name === event.target.title){
+      console.log(event.target.title);
+      allImages[i].votes++;
+      totalClicks++;
+    }
   }
 
-  var VOTED_CLICKS = 2;
+  var VOTED_CLICKS = 25;
+
   if (totalClicks === VOTED_CLICKS){
     imageEl.removeEventListener('click', showAndTrackImages);
     console.log('event listener removed.');
@@ -101,8 +103,6 @@ function showAndTrackImages (event){
     drawChart();
   }
 }
-
-
 
 
 
