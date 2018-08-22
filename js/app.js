@@ -71,14 +71,18 @@ imageEl.addEventListener('click', showAndTrackImages);
 function showAndTrackImages (event){
 
   showRandomImage(event);
+  tallyClicks(event);
 
+}
+
+function tallyClicks(event) {
   for( var i = 0; i < allImages.length; i++){
     if (allImages[i].name === event.target.title){
       console.log(event.target.title);
       allImages[i].votes++;
       totalClicks++;
       localStorage.setItem(USER_DATA, JSON.stringify(allImages)); // Save allImages data locally
-      localStorage.setItem(USER_CLICK_COUNT, JSON.stringify(totalClicks));//Save click total 
+      localStorage.setItem(USER_CLICK_COUNT, JSON.stringify(totalClicks));//Save click total
     }
   }
 
@@ -146,9 +150,7 @@ function drawChart() {
 if (localStorage.getItem(USER_DATA) === null || localStorage.getItem(USER_CLICK_COUNT) === null){
   showAndTrackImages();
 } else {
-  var userDataLocalStorage = JSON.parse(localStorage.getItem(USER_DATA));
-  console.log(userDataLocalStorage);
+  allImages = JSON.parse(localStorage.getItem(USER_DATA));
+  totalClicks = JSON.parse(localStorage.getItem(USER_CLICK_COUNT));
   showAndTrackImages();
 }
-
-showRandomImage();
