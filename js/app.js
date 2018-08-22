@@ -94,7 +94,7 @@ function showAndTrackImages (event){
     }
   }
 
-  var VOTED_CLICKS = 25;
+  var VOTED_CLICKS = 26;
 
   if (totalClicks === VOTED_CLICKS){
     imageEl.removeEventListener('click', showAndTrackImages);
@@ -124,8 +124,9 @@ function createChartArrays (){
 var data = {
   labels: chartDataNames,
   datasets: [{
+    label: '# of Votes', 
     data: chartDataVotes,
-    backgroundColor: 'navy',
+    backgroundColor: 'rgba(255, 206, 86)',
     hoverBackgroundColor: 'grey'
   }]
 };
